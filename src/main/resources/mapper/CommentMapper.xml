@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.CommentMapper">
+    <resultMap id="CommentMap" type="com.zhoulin.demo.bean.InfoComment">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="info_id" property="infoId"/>
+        <result column="user_id" property="userId"/>
+        <result column="parent_comment_id" property="parentCommentId"/>
+        <result column="reply_user_id" property="replyUserId"/>
+        <result column="like" property="like"/>
+        <result column="dislike" property="dislike"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="CommentMap">
+        SELECT * FROM `info_comment`
+    </select>
+
+    <select id="getCommentById" parameterType="int" resultMap="CommentMap">
+        SELECT * FROM `info_comment` u WHERE `id` = #{_parameter}  AND `status` = 0
+    </select>
+    <select id="getCommentsByUserId" parameterType="int" resultMap="CommentMap">
+        SELECT * FROM `info_comment` u WHERE `user_id` = #{_parameter}  AND `status` = 0
+    </select>
+    <select id="getMostLikesComments" parameterType="int" resultMap="CommentMap">
+        SELECT * FROM `info_comment`  WHERE `status` = 0
+        ORDER BY `like` DESC LIMIT 0, 20
+    </select>
+    <select id="getListByInfoId"  resultMap="CommentMap">
+        SELECT * FROM `info_comment` a WHERE `info_id` = #{infoId} AND `status` = 0
+        <!--LIMIT #{tableMessage.offset},#{tableMessage.limit}-->
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhoulin.demo.bean.InfoComment">
+        INSERT INTO `info_comment` (`content`,`info_id`,`user_id`,`parent_comment_id`,`reply_user_id`,`like`,`dislike`)
+        VALUES (#{content},#{infoId},#{userId},#{parentCommentId},#{replyUserId},#{like},#{dislike})
+    </insert>
+    <update id="delete">
+        UPDATE `info_comment` SET `status` = 1
+        where `id` = #{_parameter}
+    </update>
+    <update id="update" parameterType="com.zhoulin.demo.bean.InfoComment">
+        update `info_comment`
+        <set>
+            <if test="like != null">
+                `like` = #{like,jdbcType=INTEGER},
+            </if>
+            <if test="dislike != null">
+                `dislike` = #{dislike,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.LogInfoMapper">
+    <resultMap id="LogInfoMap" type="com.zhoulin.demo.bean.LogInfo">
+        <id column="log_id" property="logId"/>
+        <result column="user_id" property="userId"/>
+        <result column="info_id" property="infoId"/>
+        <result column="look_time" property="lookTime"/>
+        <result column="end_time" property="endTime"/>
+    </resultMap>
+
+    <select id="getLogInfoByUserId" parameterType="int" resultMap="LogInfoMap">
+        SELECT * FROM log_info
+        WHERE user_id = #{userId}
+        ORDER BY look_time DESC
+    </select>
+
+    <select id="getLogInfoByLogId" parameterType="int" resultMap="LogInfoMap">
+        SELECT * FROM log_info
+        WHERE log_id = #{logId}
+    </select>
+
+    <select id="isReadInfo" resultType="int">
+        SELECT COUNT(*) FROM log_info
+        WHERE info_id = #{arg0}
+        AND user_id = #{arg1}
+    </select>
+
+    <select id="getLogInfoByInfoId" parameterType="int" resultMap="LogInfoMap">
+        SELECT * FROM log_info
+        WHERE info_id = #{infoId}
+    </select>
+
+    <update id="updateLogInfo" parameterType="LogInfo">
+        update log_info
+        <set>
+            <if test="infoId != null">
+                info_id = #{infoId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="lookTime != null">
+                look_time = #{lookTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+        </set>
+        where log_id = #{logId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteLogInfoById" parameterType="int">
+        DELETE from log_info WHERE log_id = #{logId}
+    </delete>
+
+    <insert id="addLogInfo" parameterType="LogInfo" useGeneratedKeys="true" keyProperty="logId">
+        INSERT INTO log_info (user_id, info_id, look_time, end_time)
+        VALUES (#{userId}, #{infoId}, #{lookTime}, #{endTime})
+    </insert>
+
+    <select id="getLogInfoNowadays" parameterType="int" resultMap="LogInfoMap">
+        SELECT * FROM log_info
+        WHERE user_id = #{userId}
+        ORDER BY look_time DESC
+    </select>
+    
+    <select id="getDistinctTypeByUserId" parameterType="int">
+        SELECT DISTINCT type_id FROM log_info l, type_relation t
+        WHERE l.info_id = t.info_id
+        AND user_id = #{userId}
+        ORDER BY look_time DESC
+    </select>
+
+</mapper>

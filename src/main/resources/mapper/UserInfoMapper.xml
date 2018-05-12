@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.UserInfoMapper">
+    <resultMap id="UserInfoMap" type="com.zhoulin.demo.bean.UserInfo">
+        <id column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="user_mail" property="userMail"/>
+        <result column="user_image_url" property="userImageUrl"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="user_group_id" property="userGroupId"/>
+        <result column="user_status" property="userStatus"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="last_login_out_time" property="lastLoginOutTime"/>
+    </resultMap>
+
+    <select id="getUserByUsername" resultMap="UserInfoMap">
+        SELECT * FROM user_info
+        WHERE username = #{username}
+        AND user_status = 1
+    </select>
+
+    <select id="getAllUserInfo" resultMap="UserInfoMap" >
+        SELECT * FROM user_info
+    </select>
+
+    <select id="getUserInfoById" resultMap="UserInfoMap" parameterType="int">
+        SELECT * FROM user_info
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findUserPW" resultMap="UserInfoMap">
+        SELECT * FROM user_info
+        WHERE username = #{arg0}
+        AND user_mail = #{arg1}
+    </select>
+
+    <select id="existEmail"  parameterType="java.lang.String">
+        SELECT * FROM user_info
+        WHERE user_mail = #{userMail}
+    </select>
+
+    <insert id="addUserInfo" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO user_info (username, password, nickname, user_mail, user_image_url, gmt_create, gmt_modified, user_group_id, user_status)
+        VALUES (#{username}, #{password}, #{nickname}, #{userMail}, #{userImageUrl}, #{gmtCreate}, #{gmtModified}, #{userGroupId}, #{userStatus})
+    </insert>
+
+    <update id="updateUserInfo" parameterType="UserInfo">
+        update user_info
+        <set>
+                username = #{username,jdbcType=VARCHAR},
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="userMail != null">
+                user_mail = #{userMail,jdbcType=VARCHAR},
+            </if>
+            <if test="userImageUrl != null">
+                user_image_url = #{userImageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="userGroupId != null">
+                user_group_id = #{userGroupId,jdbcType=INTEGER},
+            </if>
+            <if test="userStatus != null">
+                user_status = #{userStatus,jdbcType=INTEGER},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteUserInfoById" parameterType="int">
+        DELETE from user_info WHERE user_id = #{userId}
+    </delete>
+
+</mapper>

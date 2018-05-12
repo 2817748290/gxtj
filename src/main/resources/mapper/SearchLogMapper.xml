@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.SearchLogMapper">
+    <resultMap id="SearchLogMap" type="com.zhoulin.demo.bean.SearchLog">
+        <id column="slog_id" property="slogId"/>
+        <result column="search_content" property="searchContent"/>
+        <result column="look_time" property="lookTime"/>
+    </resultMap>
+
+    <select id="getNowSearchCount" resultMap="SearchLogMap">
+        SELECT * FROM search_log
+        ORDER BY look_time DESC
+    </select>
+
+    <insert id="addSearchCount" parameterType="SearchLog" useGeneratedKeys="true" keyProperty="slogId">
+        INSERT INTO search_log (search_content, look_time)
+        VALUES (#{searchContent}, #{lookTime})
+    </insert>
+
+</mapper>

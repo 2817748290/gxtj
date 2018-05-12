@@ -1,0 +1,79 @@
+{
+  "settings": {
+    "number_of_replicas": 0,
+    "number_of_shards": 5
+  },
+  "mappings": {
+    "information": {
+      "dynamic": false,
+      "properties": {
+        "id": {
+          "type": "long"
+        },
+        "title": {
+          "type": "text",
+          "index": "true",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word"
+        },
+        "author": {
+          "type": "keyword"
+        },
+        "description": {
+          "type": "text",
+          "index": "true",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word"
+        },
+        "keyword": {
+          "type": "keyword",
+          "index": "true"
+        },
+        "content": {
+          "type": "text",
+          "index": "true"
+        },
+        "onlyText": {
+          "type": "text",
+          "index": "true",
+          "analyzer": "ik_max_word",
+          "search_analyzer": "ik_max_word"
+        },
+        "reads": {
+          "type": "integer"
+        },
+        "likes": {
+          "type": "integer"
+        },
+        "score": {
+          "type": "float"
+        },
+        "sourceUrl": {
+          "type": "text"
+        },
+        "sourceSite": {
+          "type": "keyword"
+        },
+        "publishDate": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "contentTime": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "feedTime": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "userAddFlag": {
+          "type": "keyword"
+        },
+        "typeName": {
+          "type": "keyword",
+          "index": "true"
+        }
+      }
+    }
+  }
+}

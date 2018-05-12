@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.UserGroupMapper">
+    <resultMap id="UserGroupMap" type="com.zhoulin.demo.bean.UserGroup">
+        <id column="user_group_id" property="userGroupId"/>
+        <result column="group_name" property="groupName"/>
+        <result column="permission" property="permission"/>
+    </resultMap>
+
+    <select id="getByUserId" parameterType="int" resultMap="UserGroupMap">
+        SELECT * FROM user_group
+        WHERE user_group_id = #{userGroupId}
+    </select>
+
+</mapper>

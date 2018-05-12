@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.InfoContentMapper">
+    <resultMap id="InfoContentMap" type="com.zhoulin.demo.bean.InfoContent">
+        <id column="id" property="id"/>
+        <result column="info_id" property="infoId"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="InfoContentMap">
+        SELECT * FROM info_content
+    </select>
+
+    <select id="getInfoContentByInfoId" parameterType="long" resultMap="InfoContentMap">
+        SELECT * FROM info_content
+        WHERE info_id = #{infoId}
+    </select>
+    <insert id="addInfoContent" parameterType="com.zhoulin.demo.bean.InfoContent" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `info_content` (`info_id`, `content`)
+        VALUES (#{infoId},#{content})
+    </insert>
+</mapper>

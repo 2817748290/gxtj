@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.UserReadMapper">
+    <resultMap id="UserReadMap" type="com.zhoulin.demo.bean.UserRead">
+        <id column="user_read_id" property="userReadId"/>
+        <result column="user_id" property="userId"/>
+        <result column="info_id" property="infoId"/>
+        <result column="look_time" property="lookTime"/>
+    </resultMap>
+
+    <select id="getUserReadByUserId" parameterType="int" resultMap="UserReadMap">
+        SELECT * FROM user_read
+        WHERE user_id = #{userId}
+        ORDER BY look_time DESC
+        LIMIT 0,10
+    </select>
+
+    <select id="findUserReadExist" resultMap="UserReadMap">
+        SELECT COUNT(*) FROM user_read
+        WHERE user_id = #{arg0}
+        AND info_id = #{arg1}
+    </select>
+
+    <insert id="addUserRead" parameterType="UserRead" useGeneratedKeys="true" keyProperty="userReadId">
+        INSERT INTO user_read (user_id, info_id, look_time)
+        VALUES (#{userId}, #{infoId}, #{lookTime})
+    </insert>
+
+    <update id="updateUserRead" parameterType="UserRead">
+        update user_read
+        <set>
+            <if test="infoId != null">
+                info_id = #{infoId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="lookTime != null">
+                look_time = #{lookTime},
+            </if>
+        </set>
+        where user_read_id = #{userReadId,jdbcType=INTEGER}
+    </update>
+
+</mapper>

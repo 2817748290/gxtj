@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.InfoImageMapper">
+    <resultMap id="InfoImageMap" type="com.zhoulin.demo.bean.InfoImage">
+        <id column="id" property="id"/>
+        <result column="info_id" property="infoId"/>
+        <result column="image" property="image"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="InfoImageMap">
+        SELECT * FROM info_image
+    </select>
+
+    <select id="getInfoImageByInfoId" parameterType="long" resultMap="InfoImageMap">
+        SELECT * FROM info_image
+        WHERE info_id = #{infoId}
+    </select>
+    <insert id="addInfoImage" parameterType="com.zhoulin.demo.bean.InfoImage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `info_image` (`info_id`, `image`)
+        VALUES (#{infoId},#{image})
+    </insert>
+</mapper>

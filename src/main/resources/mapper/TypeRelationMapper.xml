@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhoulin.demo.mapper.TypeRelationMapper">
+    <resultMap id="TypeRelationMap" type="com.zhoulin.demo.bean.TypeRelation">
+        <id column="relate_id" property="relateId"/>
+        <result column="info_id" property="infoId"/>
+        <result column="type_id" property="typeId"/>
+        <result column="only_text" property="onlyText"/>
+        <result column="publish_date" property="publishDate"/>
+    </resultMap>
+
+    <select id="getInfoByTRId" parameterType="long" resultMap="TypeRelationMap">
+        SELECT * FROM type_relation
+        WHERE info_id = #{infoId}
+    </select>
+
+    <select id="getInfoByTypeId" parameterType="int" resultMap="TypeRelationMap">
+        SELECT * FROM type_relation
+        WHERE type_id = #{typeId}
+    </select>
+
+    <insert id="addTypeRelation" parameterType="TypeRelation" useGeneratedKeys="true" keyProperty="relateId">
+        INSERT INTO type_relation (relate_id, info_id, type_id, only_text, publish_date)
+        VALUES (#{relateId}, #{infoId}, #{typeId},#{onlyText},#{publishDate})
+    </insert>
+
+    <update id="updateTypeRelationByInfoId" parameterType="TypeRelation">
+        UPDATE type_relation
+        <set>
+            <if test="typeId != null">
+                type_id = #{typeId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where info_id = #{infoId,jdbcType=INTEGER}
+    </update>
+
+    <select id="getCountByTypeId" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM type_relation
+        WHERE type_id = #{typeId}
+        ORDER BY publish_date DESC
+    </select>
+</mapper>
